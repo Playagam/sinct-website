@@ -164,7 +164,7 @@ export default function CheckoutPage() {
         <div className="space-y-4">
           <div className="glass noise border border-white/5 rounded-xl p-4">
             {items.map(item => (
-              <div key={`${item.product.id}-${item.size}`} className="flex justify-between text-sm">
+              <div key={`${item.product.sin}-${item.size}`} className="flex justify-between text-sm">
                 <span>
                   {item.product.name} · {item.selectedColor} · {item.size} × {item.quantity}
                 </span>
