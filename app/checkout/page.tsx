@@ -166,10 +166,9 @@ export default function CheckoutPage() {
             {items.map(item => (
               <div key={`${item.product.sin}-${item.size}`} className="flex justify-between text-sm">
                 <span>
-                 {item.product.name}
-{item.selectedColor ? ` · ${item.selectedColor}` : ""}
- · {item.size} × {item.quantity}
-                </span>
+  {item.product.name} · {item.size} × {item.quantity}
+</span>
+
                 <span>{formatPrice(item.product.price * item.quantity)}</span>
               </div>
             ))}
