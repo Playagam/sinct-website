@@ -4,34 +4,28 @@ const APPS_SCRIPT_BASE =
   process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ||
   "https://script.google.com/macros/s/AKfycbzJKYB26JhOn1IiFuplOuSrYCkzI5jRDGYs-Ckf-yptWFOoYhiXcUnFBLbvxpLW6PsT/exec";
 
-/**
- * Forward request to Google Apps Script backend
- */
 export async function forwardToAppsScript(
   path: string,
-  init?: RequestInit
+  options?: {
+    method?: string;
+    body?: any;
+  }
 ) {
-  const url = `${APPS_SCRIPT_BASE}${path}`;
-
-  const res = await fetch(url, {
-    ...init,
+  const res = await fetch(`${APPS_SCRIPT_BASE}${path}`, {
+    method: options?.method || "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(init?.headers || {}),
     },
+    body: options?.body ? JSON.stringify(options.body) : undefined,
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Apps Script error: ${text}`);
+    throw new Error(await res.text());
   }
 
   return res.json();
 }
 
-/**
- * Fetch hoodies/products from Sheets (client usage)
- */
 export async function fetchHoodies() {
   const res = await fetch(
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vRclz2hbPhNCTPTNzmcHgxis3rSY0xsMvrztUcTidsRNSkq1xJra-3_SdEQjfLfEXy0n23To4cuhdQv/pub?output=csv",
