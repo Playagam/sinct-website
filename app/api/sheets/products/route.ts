@@ -5,15 +5,12 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const data = await forwardToAppsScript("/products", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
+    const data = await forwardToAppsScript("/products", body);
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (err: any) {
     return NextResponse.json(
-      { error: error.message || "Internal Server Error" },
+      { error: err.message || "Server Error" },
       { status: 500 }
     );
   }

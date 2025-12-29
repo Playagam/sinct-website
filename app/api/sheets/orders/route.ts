@@ -5,10 +5,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const data = await forwardToAppsScript("/orders", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
+    const data = await forwardToAppsScript("/orders", body);
 
     return NextResponse.json(data);
   } catch (err: any) {
