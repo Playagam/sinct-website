@@ -8,6 +8,7 @@ export type Product = {
     front: string;
     back: string;
   };
+  badge?: string; // ✅ ADD THIS (optional)
 };
 
 const BASE = "/mockups";
@@ -28,7 +29,7 @@ export async function getProducts(): Promise<Product[]> {
 
       const colors = colorsRaw
         .split("|")
-        .map(c => c.trim().toLowerCase());
+        .map((c) => c.trim().toLowerCase());
 
       const defaultColor = colors[0];
 
@@ -44,8 +45,9 @@ export async function getProducts(): Promise<Product[]> {
         colors,
         images: {
           front: `${BASE}/${sin}/hoodie/${defaultColor}/front.png`,
-          back: `${BASE}/${sin}/hoodie/${defaultColor}/back.png`
-        }
+          back: `${BASE}/${sin}/hoodie/${defaultColor}/back.png`,
+        },
+        // badge optional → sheet me na ho toh bhi OK
       };
     });
 }
@@ -57,5 +59,5 @@ export const sins = [
   "envy",
   "gluttony",
   "wrath",
-  "sloth"
+  "sloth",
 ];
