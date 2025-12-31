@@ -44,15 +44,13 @@ export default function ProductPage({ params }: Props) {
   if (!product) return null;
 
   const handleAdd = () => {
-    addToCart(
-      {
-        ...product,
-        selectedColor: color,
-        selectedSize: size,
-      },
-      quantity
-    );
-  };
+  addToCart(
+    product,
+    `${size}-${color}`, // size ke saath color store
+    quantity
+  );
+};
+
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 grid lg:grid-cols-2 gap-10">
