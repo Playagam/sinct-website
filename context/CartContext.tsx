@@ -21,9 +21,13 @@ type CartContextType = {
     quantity?: number,
     selectedColor?: string
   ) => void;
-  removeFromCart: (id: string, size: string, selectedColor?: string) => void;
+  removeFromCart: (
+    sin: string,
+    size: string,
+    selectedColor?: string
+  ) => void;
   updateQuantity: (
-    id: string,
+    sin: string,
     size: string,
     quantity: number,
     selectedColor?: string
@@ -42,7 +46,7 @@ const STORAGE_KEY = "sinct_cart_v1";
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  // Load cart
+  /* ===== LOAD CART ===== */
   useEffect(() => {
     if (typeof window === "undefined") return;
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -55,7 +59,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Save cart
+  /* ===== SAVE CART ===== */
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
@@ -73,14 +77,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setItems(prev => {
       const existing = prev.find(
         item =>
-          item.product.id === product.id &&
+          item.product.sin === product.sin &&
           item.size === size &&
           item.selectedColor === selectedColor
       );
 
       if (existing) {
         return prev.map(item =>
-          item.product.id === product.id &&
+          item.product.sin === product.sin &&
           item.size === size &&
           item.selectedColor === selectedColor
             ? { ...item, quantity: item.quantity + quantity }
@@ -101,7 +105,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const removeFromCart = (
-    id: string,
+    sin: string,
     size: string,
     selectedColor?: string
   ) => {
@@ -109,7 +113,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       prev.filter(
         item =>
           !(
-            item.product.id === id &&
+            item.product.sin === sin &&
             item.size === size &&
             item.selectedColor === selectedColor
           )
@@ -118,14 +122,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const updateQuantity = (
-    id: string,
+    sin: string,
     size: string,
     quantity: number,
     selectedColor?: string
   ) => {
     setItems(prev =>
       prev.map(item =>
-        item.product.id === id &&
+        item.product.sin === sin &&
         item.size === size &&
         item.selectedColor === selectedColor
           ? { ...item, quantity }
