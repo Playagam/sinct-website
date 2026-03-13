@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -9,7 +9,7 @@ const panelVariants = {
   visible: {
     x: 0,
     opacity: 1,
-    transition: { type: "spring", damping: 18, stiffness: 150 }
+    transition: { type: "spring", damping: 20, stiffness: 160 }
   },
   exit: {
     x: "-110%",
@@ -31,6 +31,18 @@ const sins = [
 export const SidePanels = () => {
   const [showLeft, setShowLeft] = useState(false);
 
+  const closePanel = () => setShowLeft(false);
+
+  // ESC key close
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closePanel();
+    };
+
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
   return (
     <>
       {/* OPEN BUTTON */}
@@ -43,40 +55,53 @@ export const SidePanels = () => {
 
       <AnimatePresence>
         {showLeft && (
-          <motion.div
-            variants={panelVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="fixed inset-y-0 left-0 w-80 z-40 glass p-6"
-          >
-            {/* HEADER */}
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="font-display text-3xl tracking-[0.2em] uppercase">
-                seven sins
-              </h3>
-              <button
-                onClick={() => setShowLeft(false)}
-                className="text-xs uppercase tracking-widest text-smoke hover:text-white"
-              >
-                close
-              </button>
-            </div>
+          <>
+            {/* BACKDROP */}
+            <motion.div
+              className="fixed inset-0 bg-black/40 z-[90]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closePanel}
+            />
 
-            {/* SIN LINKS */}
-            <div className="flex flex-col space-y-3">
-              {sins.map((sin) => (
-                <Link
-                  key={sin}
-                  href={`/collection/${sin}`}
-                  onClick={() => setShowLeft(false)}
-                  className="border border-white/10 rounded-lg px-4 py-3 uppercase tracking-widest hover:bg-white/5 transition"
+            {/* PANEL */}
+            <motion.div
+              variants={panelVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="fixed inset-y-0 left-0 w-80 max-w-[85vw] z-[100] glass p-6 flex flex-col"
+            >
+              {/* HEADER */}
+              <div className="flex justify-between items-center mb-8">
+                <h3 className="font-display text-3xl tracking-[0.2em] uppercase">
+                  seven sins
+                </h3>
+
+                <button
+                  onClick={closePanel}
+                  className="text-xs uppercase tracking-widest text-smoke hover:text-white"
                 >
-                  {sin}
-                </Link>
-              ))}
-            </div>
-          </motion.div>
+                  close
+                </button>
+              </div>
+
+              {/* LINKS */}
+              <div className="flex flex-col space-y-3">
+                {sins.map((sin) => (
+                  <Link
+                    key={sin}
+                    href={`/collection/${sin}`}
+                    onClick={closePanel}
+                    className="border border-white/10 rounded-lg px-4 py-3 uppercase tracking-widest hover:bg-white/5 transition"
+                  >
+                    {sin}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

@@ -5,8 +5,7 @@ export default function HomePage() {
   return (
     <>
       {/* FULL SCREEN VIDEO HERO */}
-      <section className="relative h-[calc(100vh-5rem)] pt-20 w-full overflow-hidden">
-
+      <section className="relative h-screen w-full overflow-hidden pt-20">
 
         <video
           className="absolute inset-0 w-full h-full object-cover"
@@ -31,10 +30,3 @@ export default function HomePage() {
     </>
   );
 }
-
-
-
-
-
-
-
