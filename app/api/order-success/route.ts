@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
     // 🔔 ADMIN EMAIL
     await resend.emails.send({
-      from: "SINCT <onboarding@resend.dev>",
+      from: "SINCT <orders@sinct.in>",
       to: process.env.ADMIN_EMAIL!,
       subject: `🧾 New Order – ${orderId}`,
       html: `
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     // 📩 CUSTOMER EMAIL
     await resend.emails.send({
-      from: "SINCT <onboarding@resend.dev>",
+      from: "SINCT <orders@sinct.in>",
       to: customerEmail,
       subject: "🖤 Your SINCT Order is Confirmed",
       html: `
