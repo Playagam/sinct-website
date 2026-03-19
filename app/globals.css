@@ -66,6 +66,15 @@ body {
   50% { transform: translateY(-12px); }
 }
 
+.sinct-logo-spin {
+  animation: sinctSpin 1s linear 2;
+}
+
+@keyframes sinctSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 
 
 

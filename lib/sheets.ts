@@ -16,5 +16,24 @@ export async function forwardToAppsScript(
     body: JSON.stringify(body),
   });
 
-  return res.json();
+  const contentType = res.headers.get("content-type") || "";
+  const text = await res.text();
+
+  if (!res.ok) {
+    throw new Error(
+      `Apps Script request failed (${res.status}). ${
+        text ? `Response: ${text.slice(0, 220)}` : ""
+      }`
+    );
+  }
+
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch {
+    // Common case: Apps Script returns an HTML page (permissions, wrong URL, etc.)
+    throw new Error(
+      `Apps Script did not return JSON (content-type: ${contentType}). ` +
+        `Got: ${text.slice(0, 220)}`
+    );
+  }
 }

@@ -1,6 +1,6 @@
-import ProductGrid from "@/components/ProductGrid";
-import { ReviewSection } from "@/components/ReviewSection";
 import HomeDrops from "@/components/HomeDrops";
+import { ReviewSection } from "@/components/ReviewSection";
+import SendReview from "@/components/SendReview";
 
 export default function HomePage() {
   return (
@@ -35,6 +35,7 @@ export default function HomePage() {
 
       {/* REVIEWS */}
       <ReviewSection />
+      <SendReview />
     </>
   );
 }

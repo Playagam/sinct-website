@@ -5,6 +5,7 @@ import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import Header from "@/components/Header";
 import { SidePanels } from "@/components/SidePanels";
+import InitialLoader from "@/components/InitialLoader";
 
 const bebas = Bebas_Neue({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-night text-white min-h-screen antialiased">
         <CartProvider>
           <div className="relative min-h-screen">
+            <InitialLoader />
             <Header />
             <SidePanels />
             <main className="pt-24 pb-16">{children}</main>
