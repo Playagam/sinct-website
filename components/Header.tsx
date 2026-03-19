@@ -17,20 +17,13 @@ export default function Header() {
       whileHover={{ backgroundColor: "rgba(0,0,0,0.75)" }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      <div className="mx-auto max-w-6xl px-6 py-4 grid grid-cols-3 items-center">
-        
-        {/* LEFT EMPTY (BALANCER) */}
-        <div />
-
-        {/* CENTER LOGO */}
-        <Link href="/" className="relative mx-auto w-48 h-16">
-          <Image
-            src="/logo.png"
-            alt="SINƇT"
-            fill
-            priority
-            className="object-contain"
-          />
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-4 flex items-center justify-end">
+        {/* CENTER LOGO (true-centered on mobile) */}
+        <Link
+          href="/"
+          className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-40 h-12 sm:w-48 sm:h-16"
+        >
+          <Image src="/logo.png" alt="SINƇT" fill priority className="object-contain" />
         </Link>
 
         {/* RIGHT CART */}
@@ -47,7 +40,6 @@ export default function Header() {
             )}
           </Link>
         </div>
-
       </div>
     </motion.header>
   );
