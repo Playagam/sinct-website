@@ -28,7 +28,7 @@ export default function ProductPage({ params }: Props) {
 
   useEffect(() => {
     getProducts().then((products) => {
-      const found = products.find((p) => p.sin === params.slug);
+      const found = products.find((p) => p.slug === params.slug);
       if (!found) return notFound();
 
       setProduct(found);

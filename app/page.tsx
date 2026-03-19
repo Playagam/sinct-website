@@ -1,5 +1,6 @@
 import ProductGrid from "@/components/ProductGrid";
 import { ReviewSection } from "@/components/ReviewSection";
+import HomeDrops from "@/components/HomeDrops";
 
 export default function HomePage() {
   return (
@@ -21,8 +22,8 @@ export default function HomePage() {
       </section>
 
       {/* PRODUCTS */}
-      <div className="mx-auto max-w-6xl px-4 py-12">
-        <ProductGrid />
+      <div id="sins" className="mx-auto max-w-6xl px-4 py-12">
+        <HomeDrops />
       </div>
 
       {/* REVIEWS */}

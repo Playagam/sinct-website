@@ -6,7 +6,12 @@ export type CartItem = {
   quantity: number;
 };
 
-export const formatPrice = (value: number) => `$${value.toFixed(2)}`;
+export const formatPrice = (value: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(value);
 
 export const cartTotal = (items: CartItem[]) =>
   items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);

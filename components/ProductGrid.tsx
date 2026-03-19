@@ -21,7 +21,7 @@ export default function ProductGrid({ sin }: Props) {
 
       const defaults: Record<string, string> = {};
       filtered.forEach((p) => {
-        defaults[p.sin] = p.colors[0];
+        defaults[p.slug] = p.colors[0];
       });
       setSelectedColor(defaults);
     });
@@ -30,16 +30,16 @@ export default function ProductGrid({ sin }: Props) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product) => {
-        const color = selectedColor[product.sin];
+        const color = selectedColor[product.slug];
 
         return (
           <motion.div
-            key={product.sin}
+            key={product.slug}
             whileHover={{ y: -6 }}
             className="glass rounded-2xl p-4 group"
           >
             {/* PRODUCT IMAGE */}
-            <Link href={`/product/${product.sin}?color=${color}`}>
+            <Link href={`/product/${product.slug}?color=${color}`}>
               <div className="relative w-full h-[360px] overflow-hidden rounded-xl cursor-pointer">
                 <Image
                   src={`/mockups/${product.sin}/hoodie/${color}/back.png`}
@@ -65,7 +65,7 @@ export default function ProductGrid({ sin }: Props) {
                     onClick={() =>
                       setSelectedColor((prev) => ({
                         ...prev,
-                        [product.sin]: c,
+                        [product.slug]: c,
                       }))
                     }
                     className={`px-3 py-1 text-xs uppercase border rounded transition

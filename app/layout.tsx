@@ -1,4 +1,4 @@
-import BloodCursor from "@/components/BloodCursor";
+
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="pt-24 pb-16">{children}</main>
           </div>
         </CartProvider>
-        <BloodCursor />
+       
 
       </body>
     </html>
