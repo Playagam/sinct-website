@@ -6,7 +6,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { cart, customer, paymentMethod = "COD" } = body;
+    const {
+      cart,
+      customer,
+      paymentMethod = "COD",
+      paymentId,
+      orderId,
+    } = body;
 
     if (!customer?.email) {
       return NextResponse.json(
@@ -28,9 +34,11 @@ export async function POST(req: Request) {
       )
       .join("");
 
+    const from = process.env.RESEND_FROM || "SINCT <onboarding@resend.dev>";
+
     /* ================= ADMIN EMAIL ================= */
     await resend.emails.send({
-      from: "SINCT Orders <onboarding@resend.dev>",
+      from,
       to: process.env.ADMIN_EMAIL!,
       subject: `🔥 New ${paymentMethod} Order — SINCT`,
       html: `
@@ -52,6 +60,8 @@ export async function POST(req: Request) {
 
         <h2>Payment</h2>
         <p>${paymentMethod}</p>
+        ${orderId ? `<p><strong>Razorpay Order ID:</strong> ${orderId}</p>` : ""}
+        ${paymentId ? `<p><strong>Razorpay Payment ID:</strong> ${paymentId}</p>` : ""}
 
         <h2>Items</h2>
         <ul>${itemsHtml}</ul>
@@ -60,7 +70,7 @@ export async function POST(req: Request) {
 
     /* ================= CUSTOMER EMAIL ================= */
     await resend.emails.send({
-      from: "SINCT <onboarding@resend.dev>",
+      from,
       to: customer.email,
       subject: "🖤 Your SINCT Order is Confirmed",
       html: `

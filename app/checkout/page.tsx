@@ -42,63 +42,103 @@ export default function CheckoutPage() {
     e.preventDefault();
     if (!items.length) return;
 
-    setLoading(true);
-    const ready = await loadRazorpay();
-    if (!ready) {
+    try {
+      setLoading(true);
+      const ready = await loadRazorpay();
+      if (!ready) {
+        throw new Error("Unable to load Razorpay SDK");
+      }
+
+      const orderRes = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: Math.round(total * 100),
+          receipt: `rcpt_${Date.now()}`,
+        }),
+      });
+
+      const order = await orderRes.json();
+      if (!orderRes.ok || !order?.id) {
+        throw new Error(order?.message || "Failed to create Razorpay order");
+      }
+
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        amount: order.amount,
+        currency: order.currency,
+        name: "SINCT",
+        description: "Hoodie Order",
+        order_id: order.id,
+        prefill: { name, email, contact: phone },
+        theme: { color: "#9b111e" },
+        handler: async (response: any) => {
+          try {
+            const verifyRes = await fetch("/api/razorpay/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(response),
+            });
+            const verifyData = await verifyRes.json().catch(() => ({}));
+            if (!verifyRes.ok || !verifyData?.success) {
+              throw new Error(
+                verifyData?.message || "Payment verification failed"
+              );
+            }
+
+            const orderPayload = {
+              paymentMethod: "Prepaid",
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id,
+              cart: items,
+              customer: {
+                name,
+                email,
+                phone,
+                address: street,
+                city,
+                state,
+                zip,
+                country,
+              },
+            };
+
+            // Keep prepaid confirmation behavior same as COD.
+            await Promise.allSettled([
+              fetch("/api/send-email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderPayload),
+              }),
+              fetch("/api/sheets/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  ...orderPayload,
+                  total,
+                }),
+              }),
+            ]);
+
+            clearCart();
+            router.push("/success");
+          } catch (err: any) {
+            alert(err?.message || "Payment captured but verification failed.");
+          }
+        },
+      };
+
+      // @ts-ignore
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function () {
+        alert("Payment failed. Please try again.");
+      });
+      rzp.open();
+    } catch (err: any) {
+      alert(err?.message || "Payment initiation failed.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const orderRes = await fetch("/api/razorpay/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: Math.round(total * 100) }),
-    });
-
-    const order = await orderRes.json();
-
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
-      amount: order.amount,
-      currency: order.currency,
-      name: "SINCT",
-      description: "Hoodie Order",
-      order_id: order.id,
-
-      handler: async (response: any) => {
-        await fetch("/api/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            paymentMethod: "Prepaid",
-            paymentId: response.razorpay_payment_id,
-            orderId: response.razorpay_order_id,
-            cart: items,
-            customer: {
-              name,
-              email,
-              phone,
-              address: street,
-              city,
-              state,
-              zip,
-              country,
-            },
-          }),
-        });
-
-        clearCart();
-        router.push("/success");
-      },
-
-      prefill: { name, email, contact: phone },
-      theme: { color: "#9b111e" },
-    };
-
-    // @ts-ignore
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-    setLoading(false);
   };
 
   // 🟢 CASH ON DELIVERY
