@@ -79,7 +79,7 @@ export default function ProductPage({ params }: Props) {
           }
         >
           <Image
-            src={`/mockups/${product.sin}/hoodie/${color}/${view}.png`}
+            src={`/mockups/${product.sin}/${product.category}/${product.design}/${color}/${view}.png`}
             alt={`${product.name} ${view}`}
             fill
             priority
