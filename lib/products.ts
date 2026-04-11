@@ -3,6 +3,8 @@ export type Product = {
   name: string;
   slug: string;
   price: number;
+  category: string;
+  design: string;
   colors: string[];
   images: {
     front: string;
@@ -43,6 +45,8 @@ export async function getProducts(): Promise<Product[]> {
         name: name.trim(),
         slug,
         price: Number(price),
+        category,
+        design,
         colors,
         images: {
           front: `${BASE}/${sin}/${category}/${design}/${defaultColor}/front.png`,
