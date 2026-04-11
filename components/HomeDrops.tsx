@@ -14,56 +14,56 @@ export default function HomeDrops() {
     getProducts().then(setProducts).catch(() => setProducts([]));
   }, []);
 
-  const winter = products;
+  const winter = useMemo(
+  () => products.filter((p) => p.category === "hoodie"),
+  [products]
+  );
+
+  const summer = useMemo(
+  () => products.filter((p) => p.category === "tshirt"),
+  [products]
+  );
   const trending = useMemo(() => products.slice(0, 3), [products]);
   const newArrivals = useMemo(() => products.slice(0, 3), [products]);
 
-  const shown = tab === "winter" ? winter : tab === "trending" ? trending : tab === "new" ? newArrivals : [];
+  const shown =
+  tab === "winter"
+    ? winter
+    : tab === "summer"
+    ? summer
+    : tab === "trending"
+    ? trending
+    : tab === "new"
+    ? newArrivals
+    : [];
 
   return (
     <section aria-label="Drops" className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap gap-2">
-          <TabButton active={tab === "summer"} onClick={() => setTab("summer")}>
+         <TabButton active={tab === "summer"} onClick={() => setTab("summer")}>
             Summer drop
-          </TabButton>
-          <TabButton active={tab === "winter"} onClick={() => setTab("winter")}>
-            Winter drop
-          </TabButton>
+         </TabButton>
+         <TabButton active={tab === "winter"} onClick={() => setTab("winter")}>
+           Winter drop
+         </TabButton>
           <TabButton active={tab === "new"} onClick={() => setTab("new")}>
             New arrivals
-          </TabButton>
+         </TabButton>
           <TabButton
-            active={tab === "trending"}
-            onClick={() => setTab("trending")}
-          >
-            Trending
+           active={tab === "trending"}
+           onClick={() => setTab("trending")}
+         >
+          Trending
           </TabButton>
         </div>
+     </div>
 
-        {tab === "summer" && (
-          <span className="text-xs uppercase tracking-[0.18em] text-smoke/70">
-            Summer drop coming soon
-          </span>
-        )}
-      </div>
-
-      {tab === "summer" ? (
-        <div className="glass rounded-2xl border border-white/10 p-8 text-center">
-          <p className="font-display text-2xl tracking-[0.14em]">
-            Summer drop is empty for now.
-          </p>
-          <p className="mt-2 text-smoke/80 text-sm">
-            T-shirts will land here once the summer drop is live.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {shown.map((product) => (
-            <ProductCard key={product.slug} product={product} />
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {shown.map((product) => (
+         <ProductCard key={product.slug} product={product} />
+        ))}
+     </div>
     </section>
   );
 }
