@@ -25,8 +25,9 @@ export async function getProducts(): Promise<Product[]> {
   return rows
     .filter(Boolean)
     .map((row) => {
-      const [sin, name, price, colorsRaw] = row.split(",");
-
+      const [sin, name, price, colorsRaw, categoryRaw, designRaw] = row.split(",");
+      const category = categoryRaw?.trim().toLowerCase();
+      const design = designRaw?.trim() || "default";
       const colors = colorsRaw
         .split("|")
         .map((c) => c.trim().toLowerCase());
@@ -44,8 +45,8 @@ export async function getProducts(): Promise<Product[]> {
         price: Number(price),
         colors,
         images: {
-          front: `${BASE}/${sin}/hoodie/${defaultColor}/front.png`,
-          back: `${BASE}/${sin}/hoodie/${defaultColor}/back.png`,
+          front: `${BASE}/${sin}/${category}/${design}/${defaultColor}/front.png`,
+          back: `${BASE}/${sin}/${category}/${design}/${defaultColor}/back.png`,
         },
         // badge optional → sheet me na ho toh bhi OK
       };
