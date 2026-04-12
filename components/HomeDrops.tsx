@@ -7,7 +7,7 @@ import { ProductCard } from "@/components/ProductCard";
 type Tab = "winter" | "summer" | "new" | "trending";
 
 export default function HomeDrops() {
-  const [tab, setTab] = useState<Tab>("winter");
+  const [tab, setTab] = useState<Tab>("trending");
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
