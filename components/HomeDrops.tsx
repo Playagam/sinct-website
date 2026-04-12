@@ -23,8 +23,23 @@ export default function HomeDrops() {
   () => products.filter((p) => p.category === "tshirt"),
   [products]
   );
-  const trending = useMemo(() => products.slice(0, 3), [products]);
-  const newArrivals = useMemo(() => products.slice(0, 3), [products]);
+  const FEATURED_TSHIRTS = [
+  "sloth-tshirt-acid",
+  "envy-tshirt-flame",
+  "wrath-tshirt-acid",
+  "gluttony-tshirt-flame",
+  "greed-tshirt-acid",
+  "lust-tshirt-acid",
+  "gluttony-tshirt-acid",
+];
+  const trending = useMemo(
+  () => products.filter((p) => FEATURED_TSHIRTS.includes(p.slug)),
+  [products]
+);
+  const newArrivals = useMemo(
+  () => products.filter((p) => FEATURED_TSHIRTS.includes(p.slug)),
+  [products]
+);
 
   const shown =
   tab === "winter"
