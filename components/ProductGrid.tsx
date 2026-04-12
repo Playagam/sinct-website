@@ -42,8 +42,8 @@ export default function ProductGrid({ sin }: Props) {
             <Link href={`/product/${product.slug}?color=${color}`}>
               <div className="relative w-full h-[360px] overflow-hidden rounded-xl cursor-pointer">
                 <Image
-                  src={`/mockups/${product.sin}/hoodie/${color}/back.png`}
-                  alt={`${product.name} hoodie back`}
+                  src={`/mockups/${product.sin}/${product.category}/${product.design}/${color}/back.png`}
+                  alt={`${product.name} back`}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
