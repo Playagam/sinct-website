@@ -37,7 +37,7 @@ export default function HomeDrops() {
     [products]
   );
   const newArrivals = useMemo(
-    () => products.filter((p) => p.category === "tshirt").slice(0, 7),
+    () => products.filter((p) => p.category === "tshirt").slice(7, 14),
     [products]
   );
 
