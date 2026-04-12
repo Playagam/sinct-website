@@ -31,15 +31,15 @@ export default function HomeDrops() {
   "greed-tshirt-acid",
   "lust-tshirt-acid",
   "gluttony-tshirt-acid",
-];
+  ];
   const trending = useMemo(
-  () => products.filter((p) => FEATURED_TSHIRTS.includes(p.slug)),
-  [products]
-);
+    () => products.filter((p) => p.category === "tshirt").slice(0, 7),
+    [products]
+  );
   const newArrivals = useMemo(
-  () => products.filter((p) => FEATURED_TSHIRTS.includes(p.slug)),
-  [products]
-);
+    () => products.filter((p) => p.category === "tshirt").slice(0, 7),
+    [products]
+  );
 
   const shown =
   tab === "winter"
