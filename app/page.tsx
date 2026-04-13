@@ -1,3 +1,4 @@
+import Image from "next/image";
 import HomeDrops from "@/components/HomeDrops";
 import { ReviewSection } from "@/components/ReviewSection";
 import SendReview from "@/components/SendReview";
@@ -22,9 +23,14 @@ export default function HomePage() {
 
         {/* Mobile: no video (fallback hero) */}
         <div className="relative md:hidden h-[70svh]">
-          <div className="absolute inset-0 bg-gradient-to-b from-black via-night to-black" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,60,56,0.22),transparent_45%),radial-gradient(circle_at_80%_10%,rgba(155,17,30,0.18),transparent_40%)]" />
-          <div className="absolute inset-0 bg-black/35" />
+          <Image
+          src="/hero-mobile.jpg"
+          alt="SINCT hero"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/35" />
         </div>
       </section>
 

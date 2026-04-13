@@ -14,17 +14,18 @@ export default function ProductPage({ params }: Props) {
   const colorFromUrl = searchParams.get("color");
 
   const { addToCart } = useCart();
-
+  
+  const [zoomed, setZoomed] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [color, setColor] = useState<string>("");
   const [view, setView] = useState<"front" | "back">("front");
   const [size, setSize] = useState<string>("M");
   const [quantity, setQuantity] = useState(1);
 
-  const [zoomStyle, setZoomStyle] = useState({
+  /*const [zoomStyle, setZoomStyle] = useState({
     transform: "scale(1)",
     transformOrigin: "center",
-  });
+  });*/
 
   useEffect(() => {
     getProducts().then((products) => {
@@ -57,34 +58,23 @@ export default function ProductPage({ params }: Props) {
       {/* IMAGE + ZOOM */}
       <div className="space-y-4">
         <motion.div
-          className="relative aspect-[4/5] rounded-2xl overflow-hidden glass cursor-zoom-in"
+          className="relative aspect-[4/5] rounded-2xl overflow-hidden glass md:cursor-zoom-in"
           key={`${color}-${view}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          onMouseMove={(e: MouseEvent<HTMLDivElement>) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-            setZoomStyle({
-              transform: "scale(1.8)",
-              transformOrigin: `${x}% ${y}%`,
-            });
+          style={{
+            transform: zoomed ? "scale(2)" : "scale(1)",
+            transformOrigin: "center",
           }}
-          onMouseLeave={() =>
-            setZoomStyle({
-              transform: "scale(1)",
-              transformOrigin: "center",
-            })
-          }
+          onClick={() => setZoomed((z) => !z)}
+          onTouchStart={() => setZoomed((z) => !z)}
         >
           <Image
             src={`/mockups/${product.sin}/${product.category}/${product.design}/${color}/${view}.png`}
             alt={`${product.name} ${view}`}
             fill
             priority
-            className="object-cover transition-transform duration-200 ease-out"
-            style={zoomStyle}
+            className="object-contain"
           />
         </motion.div>
 
@@ -121,7 +111,7 @@ export default function ProductPage({ params }: Props) {
           <p className="text-xs uppercase tracking-widest text-smoke mb-2">
             Color
           </p>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 max-w-full">
             {product.colors.map((c) => (
               <button
                 key={c}
